@@ -3,22 +3,18 @@ package ua.azaika.taskmanager.service;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import ua.azaika.taskmanager.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@SpringBootTest
 class UserServiceTest {
 
-    @Autowired
     private UserService userService;
 
     @BeforeEach
     void setUp() {
-        userService.getAll().clear();
+        this.userService = new UserServiceImpl();
     }
 
     @Test
