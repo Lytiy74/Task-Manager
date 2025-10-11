@@ -1,14 +1,14 @@
 package ua.azaika.taskmanager.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode
 @ToString
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     private Integer id;
     private String userName;
