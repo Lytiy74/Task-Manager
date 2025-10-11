@@ -8,7 +8,15 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private final List<User> users = new ArrayList<>();
+    private final List<User> users;
+
+    public UserServiceImpl(List<User> predefinedUsers) {
+        this.users = predefinedUsers;
+    }
+
+    public UserServiceImpl() {
+        this(new ArrayList<>());
+    }
 
     @Override
     public User save(User user) {
