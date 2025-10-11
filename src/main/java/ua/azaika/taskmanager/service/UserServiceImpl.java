@@ -31,19 +31,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUserName(String userName) {
+    public List<User> findByUserName(String userName) {
         return users.stream()
                 .filter(user -> user.getUserName().equals(userName))
-                .findFirst()
-                .orElse(null);
+                .toList();
     }
 
     @Override
-    public User findByEmail(String email) {
+    public List<User> findByEmail(String email) {
         return users.stream()
                 .filter(user -> user.getEmail().equals(email))
-                .findFirst()
-                .orElse(null);
+                .toList();
     }
 
     @Override

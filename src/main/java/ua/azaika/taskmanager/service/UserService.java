@@ -11,9 +11,9 @@ public interface UserService {
 
     User findById(Integer id);
 
-    User findByUserName(String userName);
+    List<User> findByUserName(String userName);
 
-    User findByEmail(String email);
+    List<User> findByEmail(String email);
 
     User update(Integer id, User user);
 

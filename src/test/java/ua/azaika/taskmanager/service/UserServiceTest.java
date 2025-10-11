@@ -107,10 +107,10 @@ class UserServiceTest {
         userService.save(user);
 
         //when
-        User foundUser = userService.findByUserName(userName);
+        List<User> foundUsers = userService.findByUserName(userName);
 
         //then
-        Assertions.assertThat(foundUser).isEqualTo(user);
+        Assertions.assertThat(foundUsers.getFirst()).isEqualTo(user);
     }
 
     @Test
@@ -125,10 +125,10 @@ class UserServiceTest {
         userService.save(user);
 
         //when
-        User foundUser = userService.findByEmail(email);
+        List<User> foundUsers = userService.findByEmail(email);
 
         //then
-        Assertions.assertThat(foundUser).isEqualTo(user);
+        Assertions.assertThat(foundUsers.getFirst()).isEqualTo(user);
     }
 
     @Test

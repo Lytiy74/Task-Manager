@@ -43,17 +43,25 @@ public class UserController {
     public ResponseEntity<List<UserResponseDTO>> getAll(
             @RequestParam(required = false) String userName,
             @RequestParam(required = false) String email) {
-
+        List<User> users;
         if (userName != null) {
-            User user = userService.findByUserName(userName);
-            if (user == null) return ResponseEntity.notFound().build();
-            return ResponseEntity.ok(List.of(userMapper.toResponseDTO(user)));
+            users = userService.findByUserName(userName);
+            if (users.isEmpty()) return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(
+                    users.stream()
+                            .map(userMapper::toResponseDTO)
+                            .toList()
+            );
         }
 
         if (email != null) {
-            User user = userService.findByEmail(email);
-            if (user == null) return ResponseEntity.notFound().build();
-            return ResponseEntity.ok(List.of(userMapper.toResponseDTO(user)));
+            users = userService.findByEmail(email);
+            if (users.isEmpty()) return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(
+                    users.stream()
+                            .map(userMapper::toResponseDTO)
+                            .toList()
+            );
         }
 
         List<UserResponseDTO> responseDTOS = userService.getAll().stream()
