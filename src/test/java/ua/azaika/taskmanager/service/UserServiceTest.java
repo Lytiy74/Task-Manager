@@ -173,29 +173,6 @@ class UserServiceTest {
     }
 
     @Test
-    void givenUserInDB_whenPartialUpdateByNewUser_ShouldReturnSaveUser() {
-        //given
-        User user = User.builder()
-                .userName("user1")
-                .email("testMail@god.com")
-                .password("password")
-                .build();
-        int id = userService.save(user).getId();
-        User updatesUser = User.builder()
-                .userName("NewUserName")
-                .build();
-
-        //when
-        User updated = userService.partialUpdate(id, updatesUser);
-
-        //then
-        Assertions.assertThat(updated).isEqualTo(user);
-        Assertions.assertThat(updated.getUserName()).isEqualTo(updatesUser.getUserName());
-        Assertions.assertThat(updated.getEmail()).isEqualTo(user.getEmail());
-        Assertions.assertThat(updated.getPassword()).isEqualTo(user.getPassword());
-    }
-
-    @Test
     void givenUserInDB_whenDeleteById_ShouldDeleteUserFromDB() {
         //given
         User user = User.builder()

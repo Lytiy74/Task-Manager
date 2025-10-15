@@ -17,8 +17,6 @@ public interface UserService {
 
     User update(Integer id, User user);
 
-    User partialUpdate(Integer id, User user);
-
     void deleteById(Integer id);
 
 }

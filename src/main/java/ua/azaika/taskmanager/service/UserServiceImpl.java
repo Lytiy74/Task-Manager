@@ -54,16 +54,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User partialUpdate(Integer id, User updates) {
-        User existingUser = findById(id);
-        if (existingUser == null) return null;
-        if (updates.getUserName() != null) existingUser.setUserName(updates.getUserName());
-        if (updates.getEmail() != null) existingUser.setEmail(updates.getEmail());
-        if (updates.getPassword() != null) existingUser.setPassword(updates.getPassword());
-        return existingUser;
-    }
-
-    @Override
     public void deleteById(Integer id) {
         users.stream()
                 .filter(u -> u.getId().equals(id))
