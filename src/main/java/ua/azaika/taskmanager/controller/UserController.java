@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -40,30 +40,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> getAll(
-            @RequestParam(required = false) String userName,
-            @RequestParam(required = false) String email) {
-        List<User> users;
-        if (userName != null) {
-            users = userService.findByUserName(userName);
-            if (users.isEmpty()) return ResponseEntity.notFound().build();
-            return ResponseEntity.ok(
-                    users.stream()
-                            .map(userMapper::toResponseDTO)
-                            .toList()
-            );
-        }
-
-        if (email != null) {
-            users = userService.findByEmail(email);
-            if (users.isEmpty()) return ResponseEntity.notFound().build();
-            return ResponseEntity.ok(
-                    users.stream()
-                            .map(userMapper::toResponseDTO)
-                            .toList()
-            );
-        }
-
+    public ResponseEntity<List<UserResponseDTO>> getAll() {
         List<UserResponseDTO> responseDTOS = userService.getAll().stream()
                 .map(userMapper::toResponseDTO)
                 .toList();
@@ -74,14 +51,6 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> put(@PathVariable Integer id, @RequestBody UserPostRequestDTO userPostRequestDTO) {
         User inputUser = userMapper.toUser(userPostRequestDTO);
         User updatedUser = userService.update(id, inputUser);
-        if (updatedUser == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(userMapper.toResponseDTO(updatedUser));
-    }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> patch(@PathVariable Integer id, @RequestBody UserPostRequestDTO userPostRequestDTO) {
-        User inputUser = userMapper.toUser(userPostRequestDTO);
-        User updatedUser = userService.partialUpdate(id, inputUser);
         if (updatedUser == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(userMapper.toResponseDTO(updatedUser));
     }
