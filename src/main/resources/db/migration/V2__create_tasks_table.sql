@@ -1,7 +1,6 @@
 CREATE TABLE tasks
 (
-    id          INT         NOT NULL,
+    id          SERIAL PRIMARY KEY,
     name        VARCHAR(64) NOT NULL,
-    description VARCHAR(127),
-    PRIMARY KEY (id)
+    description VARCHAR(127)
 )

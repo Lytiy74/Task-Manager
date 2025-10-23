@@ -11,10 +11,6 @@ public interface UserService {
 
     User findById(Integer id);
 
-    List<User> findByUserName(String userName);
-
-    List<User> findByEmail(String email);
-
     User update(Integer id, User user);
 
     void deleteById(Integer id);

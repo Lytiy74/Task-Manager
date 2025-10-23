@@ -1,8 +1,7 @@
 CREATE TABLE users
 (
-    id       INT NOT NULL,
+    id       SERIAL PRIMARY KEY,
     name     varchar(32),
     email    varchar(32) UNIQUE,
-    password varchar(32),
-    PRIMARY KEY (id)
+    password varchar(32)
 )
