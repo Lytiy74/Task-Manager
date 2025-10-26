@@ -1,3 +1,4 @@
+
 package ua.azaika.taskmanager.repository;
 
 import lombok.RequiredArgsConstructor;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import ua.azaika.taskmanager.mapper.jdbc.UserRowMapper;
 import ua.azaika.taskmanager.model.User;
 
-import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.util.List;
@@ -25,13 +25,14 @@ public class UserRepository {
             WHERE id = ?
             """;
     public static final String DELETE_FROM_USERS_WHERE_ID = "DELETE FROM users WHERE id = ?";
+    public static final String DELETE_USER_TASKS = "DELETE FROM user_task WHERE user_id = ?";
     public static final String SELECT_ALL_USERS_QUERY = "SELECT * FROM users";
     public static final String UPDATE_USERS_QUERY = """
             UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?
             """;
 
-    private final DataSource dataSource;
     private final JdbcTemplate jdbcTemplate;
+    private final UserRowMapper userRowMapper;
 
     public User save(User user) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -47,13 +48,12 @@ public class UserRepository {
     }
 
     public List<User> getAll() {
-        return jdbcTemplate.query(
-                SELECT_ALL_USERS_QUERY, new UserRowMapper());
+        return jdbcTemplate.query(SELECT_ALL_USERS_QUERY, userRowMapper);
     }
 
     public User findById(Integer id) {
         return jdbcTemplate.queryForObject(SELECT_FROM_USERS_WHERE_ID,
-                new Object[]{id}, new int[]{Types.INTEGER}, new UserRowMapper());
+                new Object[]{id}, new int[]{Types.INTEGER}, userRowMapper);
     }
 
     public User update(Integer id, User updates) {
@@ -64,6 +64,7 @@ public class UserRepository {
     }
 
     public void deleteById(Integer id) {
+        jdbcTemplate.update(DELETE_USER_TASKS, id);
         jdbcTemplate.update(DELETE_FROM_USERS_WHERE_ID, id);
     }
 }
