@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: TaskManager
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_URL}/${POSTGRES_NAME}?serverTimezone=Europe/Kyiv
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}

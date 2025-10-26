@@ -51,7 +51,7 @@ class UserControllerTest {
         );
 
         UserResponseDTO responseDTO = new UserResponseDTO(
-                "1",
+                1,
                 savedUserEntity.getUserName(),
                 savedUserEntity.getEmail()
         );
@@ -84,7 +84,7 @@ class UserControllerTest {
         );
 
         UserResponseDTO responseDTO = new UserResponseDTO(
-                "1",
+                1,
                 savedUserEntity.getUserName(),
                 savedUserEntity.getEmail()
         );
@@ -112,7 +112,7 @@ class UserControllerTest {
                 .build();
 
         UserResponseDTO responseDTO = new UserResponseDTO(
-                "1",
+                1,
                 user.getUserName(),
                 user.getEmail()
         );
@@ -156,8 +156,8 @@ class UserControllerTest {
                 .password("password2")
                 .build();
 
-        UserResponseDTO responseDTO1 = new UserResponseDTO("1", "User1", "user1@test.com");
-        UserResponseDTO responseDTO2 = new UserResponseDTO("2", "User2", "user2@test.com");
+        UserResponseDTO responseDTO1 = new UserResponseDTO(1, "User1", "user1@test.com");
+        UserResponseDTO responseDTO2 = new UserResponseDTO(2, "User2", "user2@test.com");
 
         Mockito.when(userService.getAll()).thenReturn(List.of(user1, user2));
         Mockito.when(userMapper.toResponseDTO(user1)).thenReturn(responseDTO1);
@@ -197,7 +197,7 @@ class UserControllerTest {
                 .build();
 
         UserResponseDTO responseDTO = new UserResponseDTO(
-                "1",
+                1,
                 "UpdatedUser",
                 "updated@test.com"
         );

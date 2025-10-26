@@ -1,24 +1,31 @@
+
 package ua.azaika.taskmanager.service;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import ua.azaika.taskmanager.model.User;
+import ua.azaika.taskmanager.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SpringBootTest
+@ActiveProfiles("test")
 class UserServiceTest {
 
+    @Autowired
     private UserService userService;
 
-    @BeforeEach
-    void setUp() {
-        this.userService = new UserServiceImpl();
-    }
+    @MockitoBean
+    private UserRepository userRepository;
 
     @Test
-    void givenUserEntity_whenSave_ShouldSave() {
+    void givenUserEntity_whenSave_ShouldReturnSavedUser() {
         //given
         User userToSave = User.builder()
                 .userName("User1")
@@ -26,12 +33,23 @@ class UserServiceTest {
                 .password("password1")
                 .build();
 
+        User savedUser = User.builder()
+                .id(1)
+                .userName("User1")
+                .email("testMail@god.com")
+                .password("password1")
+                .build();
+
+        Mockito.when(userRepository.save(userToSave)).thenReturn(savedUser);
+
         //when
-        userService.save(userToSave);
+        User result = userService.save(userToSave);
 
         //then
-        User savedUser = userService.getAll().getFirst();
-        Assertions.assertThat(savedUser).isEqualTo(userToSave);
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result.getId()).isEqualTo(1);
+        Assertions.assertThat(result.getUserName()).isEqualTo("User1");
+        Mockito.verify(userRepository, Mockito.times(1)).save(userToSave);
     }
 
     @Test
@@ -43,11 +61,21 @@ class UserServiceTest {
                 .password("password1")
                 .build();
 
+        User savedUser = User.builder()
+                .id(1)
+                .userName("User1")
+                .email("testMail@god.com")
+                .password("password1")
+                .build();
+
+        Mockito.when(userRepository.save(userToSave)).thenReturn(savedUser);
+
         //when
-        userService.save(userToSave);
+        User result = userService.save(userToSave);
 
         //then
-        Assertions.assertThat(userToSave.getId()).isNotNull();
+        Assertions.assertThat(result.getId()).isNotNull();
+        Assertions.assertThat(result.getId()).isEqualTo(1);
     }
 
     @Test
@@ -56,13 +84,15 @@ class UserServiceTest {
         List<User> predefinedUsers = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             User user = User.builder()
+                    .id(i + 1)
                     .userName("User" + i)
-                    .email("testMail" + i)
+                    .email("testMail" + i + "@god.com")
                     .password("password" + i)
                     .build();
             predefinedUsers.add(user);
-            userService.save(user);
         }
+
+        Mockito.when(userRepository.getAll()).thenReturn(predefinedUsers);
 
         //when
         List<User> savedUsers = userService.getAll();
@@ -71,123 +101,70 @@ class UserServiceTest {
         Assertions.assertThat(savedUsers)
                 .hasSize(10)
                 .containsAll(predefinedUsers);
+        Mockito.verify(userRepository, Mockito.times(1)).getAll();
     }
 
     @Test
     void givenIdOfUser_whenFindById_ShouldReturnUserWithThisId() {
         //given
         User user = User.builder()
+                .id(1)
                 .userName("user1")
                 .email("testMail@god.com")
                 .password("password")
                 .build();
-        int id = 1;
-        userService.save(user);
+
+        Mockito.when(userRepository.findById(1)).thenReturn(user);
 
         //when
-        User foundUser = userService.findById(id);
+        User foundUser = userService.findById(1);
 
         //then
-        Assertions.assertThat(foundUser).isEqualTo(user);
-    }
-
-    @Test
-    void givenUserName_whenFindByUserName_ShouldReturnUserWithThisUserName() {
-        //given
-        User user = User.builder()
-                .userName("user1")
-                .email("testMail@god.com")
-                .password("password")
-                .build();
-        String userName = user.getUserName();
-        userService.save(user);
-
-        //when
-        List<User> foundUsers = userService.findByUserName(userName);
-
-        //then
-        Assertions.assertThat(foundUsers.getFirst()).isEqualTo(user);
-    }
-
-    @Test
-    void givenUserEmail_whenFindByEmail_ShouldReturnUserWithThisEmail() {
-        //given
-        User user = User.builder()
-                .userName("user1")
-                .email("testMail@god.com")
-                .password("password")
-                .build();
-        String email = user.getEmail();
-        userService.save(user);
-
-        //when
-        List<User> foundUsers = userService.findByEmail(email);
-
-        //then
-        Assertions.assertThat(foundUsers.getFirst()).isEqualTo(user);
-    }
-
-    @Test
-    void givenUserInDB_whenUpdateByNewUser_ShouldSaveUpdatedUser() {
-        //given
-        User user = User.builder()
-                .userName("user1")
-                .email("testMail@god.com")
-                .password("password")
-                .build();
-        int id = userService.save(user).getId();
-        User updatesUser = User.builder()
-                .userName("NewUserName")
-                .email("newEmail@god.com")
-                .password("newPassword")
-                .build();
-
-        //when
-        userService.update(id, updatesUser);
-
-        //then
-        User updatedUser = userService.findById(id);
-        Assertions.assertThat(updatedUser).isEqualTo(updatesUser);
+        Assertions.assertThat(foundUser).isNotNull();
+        Assertions.assertThat(foundUser.getId()).isEqualTo(1);
+        Assertions.assertThat(foundUser.getUserName()).isEqualTo("user1");
+        Mockito.verify(userRepository, Mockito.times(1)).findById(1);
     }
 
     @Test
     void givenUserInDB_whenUpdateByNewUser_ShouldReturnUpdatedUser() {
         //given
-        User user = User.builder()
-                .userName("user1")
-                .email("testMail@god.com")
-                .password("password")
-                .build();
-        int id = userService.save(user).getId();
         User updatesUser = User.builder()
                 .userName("NewUserName")
                 .email("newEmail@god.com")
                 .password("newPassword")
                 .build();
 
+        User updatedUser = User.builder()
+                .id(1)
+                .userName("NewUserName")
+                .email("newEmail@god.com")
+                .password("newPassword")
+                .build();
+
+        Mockito.when(userRepository.update(1, updatesUser)).thenReturn(updatedUser);
+
         //when
-        User updated = userService.update(id, updatesUser);
+        User result = userService.update(1, updatesUser);
 
         //then
-        Assertions.assertThat(updated).isEqualTo(updatesUser);
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result.getId()).isEqualTo(1);
+        Assertions.assertThat(result.getUserName()).isEqualTo("NewUserName");
+        Assertions.assertThat(result.getEmail()).isEqualTo("newEmail@god.com");
+        Mockito.verify(userRepository, Mockito.times(1)).update(1, updatesUser);
     }
 
     @Test
-    void givenUserInDB_whenDeleteById_ShouldDeleteUserFromDB() {
+    void givenUserInDB_whenDeleteById_ShouldCallRepositoryDelete() {
         //given
-        User user = User.builder()
-                .userName("user1")
-                .email("testMail@god.com")
-                .password("password")
-                .build();
-        int id = userService.save(user).getId();
+        Integer userId = 1;
+        Mockito.doNothing().when(userRepository).deleteById(userId);
 
         //when
-        userService.deleteById(id);
+        userService.deleteById(userId);
 
         //then
-        Assertions.assertThat(userService.findById(id)).isNull();
+        Mockito.verify(userRepository, Mockito.times(1)).deleteById(userId);
     }
-
-
 }
