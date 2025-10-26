@@ -1,7 +1,7 @@
 package ua.azaika.taskmanager.dto;
 
 public record UserResponseDTO(
-        String id,
+        Integer id,
         String userName,
         String email
 ) {
