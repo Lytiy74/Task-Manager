@@ -15,6 +15,7 @@ public class TaskRowMapper implements RowMapper<Task> {
                 .id(rs.getInt("id"))
                 .title(rs.getString("title"))
                 .description(rs.getString("description"))
+
                 .build();
     }
 }
